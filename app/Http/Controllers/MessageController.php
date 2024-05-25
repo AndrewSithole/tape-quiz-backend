@@ -42,7 +42,7 @@ class MessageController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'code' => 'required|string|max:255|unique:sermons',
+            'code' => 'required|string|max:255|unique:messages',
             'date_preached' => 'required|date',
             'location' => 'required|string|max:255',
             'image' => 'nullable|image|max:2048', // Max 2MB file
@@ -55,7 +55,7 @@ class MessageController extends Controller
         $sermon = new Message($data);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('sermons', 's3');
+            $path = $request->file('image')->store('messages', 's3');
             $sermon->image_url = Storage::disk('s3')->url($path);
         }
 
@@ -66,5 +66,31 @@ class MessageController extends Controller
     public function edit(Message $message): View
     {
         return view('admin.messages.edit', compact('message'));
+    }
+
+    public function update(Message $message, Request $request): RedirectResponse
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'code' => 'required|string|max:255|unique:messages,code,' . $message->id,
+            'date_preached' => 'required|date',
+            'location' => 'required|string|max:255',
+            'image' => 'nullable|image|max:2048', // Max 2MB file
+            'duration' => 'required|integer',
+        ]);
+
+        $data = $request->only(['title', 'code', 'date_preached', 'location', 'duration']);
+        $data['date_preached'] = date('Y-m-d', strtotime($data['date_preached']));
+
+        $message->fill($data);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('messages', 's3');
+            $message->image_url = Storage::disk('s3')->url($path);
+        }
+
+        $message->save();
+
+        return redirect()->route('admin.messages.index')->with('success', 'Sermon updated successfully.');
     }
 }
