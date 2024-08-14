@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Create Message') }}
+            {{ __('Messages') }}
         </h2>
     </x-slot>
 
@@ -56,7 +56,9 @@
                                     <td class="border border-slate-700 px-4 py-2">{{ $message->duration }} minutes</td>
                                     <td class="border border-slate-700 px-4 py-2">{{ $message->quizzes->isEmpty() ? 'No' : 'Yes' }}</td>
                                     <td class="border border-slate-700 px-4 py-2">
-                                        <a href="{{ route('admin.messages.edit', $message->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Edit</a>
+                                        <a href="{{ route('admin.messages.quiz.create', $message->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                            Create&nbsp;quiz
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach

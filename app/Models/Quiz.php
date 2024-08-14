@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Quiz extends Model
 {
     use HasFactory;
-    public function sermon() {
+    public function message() {
         return $this->belongsTo(Message::class);
     }
 

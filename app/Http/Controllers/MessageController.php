@@ -37,6 +37,14 @@ class MessageController extends Controller
     {
         return view('admin.messages.create');
     }
+    public function createQuiz(Message $message): View
+    {
+        $existing = $message->quizzes->first();
+        if($existing) {
+            return view('admin.messages.create-quiz', compact('message'));
+        }
+        return view('admin.messages.create-quiz', compact('message'));
+    }
 
     public function store(Request $request): RedirectResponse
     {
