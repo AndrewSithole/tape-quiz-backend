@@ -11,25 +11,19 @@
         <ul class="navbar-nav">
             <li class="nav-item">
                 <a  href="{{route('admin.dashboard')}}" class="nav-link @if(request()->routeIs('admin.dashboard'))active @endif" role="button" aria-expanded="false">
-                    <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                        <i class="ni ni-shop text-primary text-sm opacity-10"></i>
-                    </div>
+                    <i class="bi bi-house text-primary opacity-10"></i>
                     <span class="nav-link-text ms-1">Dashboard</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a  href="{{route('admin.messages.index')}}" class="nav-link @if(request()->routeIs('admin.messages.index'))active @endif" role="button" aria-expanded="false">
-                    <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                        <i class="ni ni-shop text-primary text-sm opacity-10"></i>
-                    </div>
+                    <i class="bi bi-cassette text-primary opacity-10"></i>
                     <span class="nav-link-text ms-1">Messages</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a  href="{{route('admin.quiz.index')}}" class="nav-link @if(request()->routeIs('admin.quiz.index'))active @endif" role="button" aria-expanded="false">
-                    <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                        <i class="ni ni-shop text-primary text-sm opacity-10"></i>
-                    </div>
+                    <i class="bi-patch-question text-primary opacity-10"></i>
                     <span class="nav-link-text ms-1">Quiz</span>
                 </a>
             </li>
