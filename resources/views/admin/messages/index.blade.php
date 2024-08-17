@@ -82,7 +82,7 @@
                                 </p>
                             </td>
                             <td >
-                                <a href="{{ route('admin.messages.quiz.create', $message->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                <a href="{{ route('admin.messages.quiz.create', $message->id) }}" class="btn btn-xs btn-primary m-1">
                                     Create&nbsp;quiz
                                 </a>
                             </td>
@@ -92,7 +92,9 @@
                 </table>
             </div>
             <!-- Pagination links -->
-            {{ $messages->links() }}
+            <div class="p-2">
+                {{ $messages->links() }}
+            </div>
         </div>
     </x-slot>
 </x-app-layout>
