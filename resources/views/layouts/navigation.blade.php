@@ -37,7 +37,9 @@
     </div>
     <div class="sidenav-footer mx-3 my-3">
         <div class="card card-plain shadow-none" id="sidenavCard">
-            <img class="w-60 mx-auto" src="https://branham.org/branham/images/wheatonly.png" alt="sidebar_illustration">
+            <div class="w-100 d-flex justify-center">
+                <img class="mx-auto" src="https://branham.org/branham/images/wheatonly.png" alt="sidebar_illustration">
+            </div>
             <div class="card-body text-center p-3 w-100 pt-0">
                 <div class="docs-info">
                     <h6 class="mb-0">Powered by</h6>
