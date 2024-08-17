@@ -28,9 +28,11 @@
                         <div class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
                             <div class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden" style="background-image: url({{ asset('images/tree.jpg') }}); background-position: center;
           background-size: cover;">
-                                <span class="mask bg-gradient-primary opacity-6"></span>
-                                <h4 class="mt-5 text-white font-weight-bolder position-relative">"Attention is the new currency"</h4>
-                                <p class="text-white position-relative">The more effortless the writing looks, the more effort the writer actually put into the process.</p>
+                                <span class="mask bg-gradient-primary opacity-3"></span>
+                                <p class="text-white position-relative"><span class="text-3xl">"</span>And today, in studying, I have written down many Scriptures so you can study It. And also…And the tapes will reveal much of It, as you study.
+                                    And there is so many things!</p>
+                                 <h4 class="mt-5 text-white font-weight-bolder position-relative">63-0318 - The First Seal</h4>
+{{--                                <p>Rev. William Marrion Branham</p>--}}
                             </div>
                         </div>
                     </div>

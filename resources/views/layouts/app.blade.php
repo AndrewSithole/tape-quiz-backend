@@ -75,7 +75,7 @@
     <div class="card shadow-lg">
         <div class="card-header pb-0 pt-3 bg-transparent ">
             <div class="float-start">
-                <h5 class="mt-3 mb-0">Argon Configurator</h5>
+                <h5 class="mt-3 mb-0">App Configurator</h5>
                 <p>See our dashboard options.</p>
             </div>
             <div class="float-end mt-4">

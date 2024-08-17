@@ -1,10 +1,17 @@
 <x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
     <div class="card card-plain">
         <div class="card-header pb-0 text-start">
-            <h4 class="font-weight-bolder">Sign In</h4>
-            <p class="mb-0">Enter your email and password to sign in</p>
+            <div class="height-80 d-flex justify-content-center my-3">
+                <a href="{{ url('/') }}">
+                    <img
+                        src="{{ asset('images/logo.png') }}"
+                        alt="Laravel logo"
+                        class="height-80"
+                    />
+                </a>
+            </div>
+            <h4 class="font-weight-bolder text-center">Sign In</h4>
+            <p class="mb-0 text-center">Enter your email and password to sign in</p>
         </div>
         <div class="card-body">
             <form role="form" method="POST" action="{{ route('login') }}">
@@ -43,11 +50,10 @@
                 </a>
             @endif
 
-            <p class="mb-4 text-sm mx-auto">
-                Don't have an account?
-                <a href="javascript:;" class="text-primary text-gradient font-weight-bold">Sign up</a>
-            </p>
+{{--            <p class="mb-4 text-sm mx-auto">--}}
+{{--                Don't have an account?--}}
+{{--                <a href="javascript:;" class="text-primary text-gradient font-weight-bold">Sign up</a>--}}
+{{--            </p>--}}
         </div>
     </div>
-
 </x-guest-layout>

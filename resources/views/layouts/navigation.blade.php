@@ -31,7 +31,10 @@
     </div>
     <div class="sidenav-footer mx-3 my-3">
         <div class="card card-plain shadow-none" id="sidenavCard">
-            <div class="w-100 d-flex justify-center">
+                    <div class="w-100 d-flex justify-content-center">
+                        <a href="{{route('logout')}}" class="btn btn-outline-primary"><i class="bi bi-door-closed"></i> Logout</a>
+                    </div>
+            <div class="w-100 d-flex justify-content-center">
                 <img class="mx-auto" src="https://branham.org/branham/images/wheatonly.png" alt="sidebar_illustration">
             </div>
             <div class="card-body text-center p-3 w-100 pt-0">
