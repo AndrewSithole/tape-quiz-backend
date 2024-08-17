@@ -38,9 +38,10 @@
                     </li>
                     <li class="breadcrumb-item text-sm text-white"><a class="opacity-5 text-white" href="javascript:;">Admin</a></li>
                     <li class="breadcrumb-item text-sm text-white active" aria-current="page">
-                        {{ $header }}
+                        {{ $title }}
                     </li>
                 </ol>
+                {{ $header }}
             </nav>
             <div class="sidenav-toggler sidenav-toggler-inner d-xl-block d-none ">
                 <a href="javascript:;" class="nav-link p-0">

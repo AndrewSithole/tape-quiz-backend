@@ -1,8 +1,11 @@
 <x-app-layout>
+    <x-slot name="title">
+        {{ __('Messages') }}
+    </x-slot>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h6 class="font-weight-bolder mb-0 text-white">
             {{ __('Messages') }}
-        </h2>
+        </h6>
     </x-slot>
 
     <x-slot name="body">
@@ -14,7 +17,7 @@
                 <div class="d-flex justify-items-start gap-2 space-x-4">
                     <div class="input-group">
                         <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                        <input type="text" class="form-control" placeholder="Search by title or code..." value="{{ request('search') }}">
+                        <input type="text" class="form-control" name="search" placeholder="Search by title or code..." value="{{ request('search') }}">
                     </div>
                     <select name="has_quiz" class="px-4 py-2 text-gray-900 dark:text-gray-200 bg-gray-200 dark:bg-gray-600 rounded shadow focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-300">
                         <option value="">All</option>
@@ -27,35 +30,58 @@
                     </button>
                 </div>
             </form>
-            <div class="table-responsive">
-                <table class="table table-flush dataTable-table">
-                    <thead class="thead-light">
+            <div class="table-responsive ">
+                <table class="table align-items-center mb-0">
+                    <thead >
                     <tr>
-                        <th class="px-4 py-2">Code</th>
-                        <th class="px-4 py-2">Title</th>
-                        <th class="px-4 py-2">Date Preached</th>
-                        <th class="px-4 py-2">Location</th>
-                        <th class="px-4 py-2">Duration</th>
-                        <th class="px-4 py-2">Has Quiz?</th>
-                        <th class="px-4 py-2">Actions</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Code</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Title</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date Preached</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Location</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Duration</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Has Quiz?</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Actions</th>
                     </tr>
                     </thead>
                     <tbody class="text-gray-700 dark:text-gray-200">
                     @foreach ($messages as $message)
                         <tr>
-                            <td class="border border-slate-700 px-4 py-2">{{ $message->code }}</td>
-                            <td class="border border-slate-700 px-4 py-2">{{ $message->title }}</td>
-                            <td class="border border-slate-700 px-4 py-2">
-                                @if ($message->date_preached instanceof \DateTime)
+                            <td >
+                                <h6 class="mb-0 text-sm py-1">
+                                    {{ $message->code }}
+                                </h6>
+                            </td>
+                            <td >
+                                <p class="text-sm text-secondary mb-0">
+                                    {{ $message->title }}
+                                </p>
+                            </td>
+                            <td >
+                                <p class="text-sm text-secondary mb-0">
+
+                            @if ($message->date_preached instanceof \DateTime)
                                     {{ $message->date_preached->format('M d, Y') }}
                                 @else
                                     {{ gettype($message->date_preached) }}
                                 @endif
+                                </p>
                             </td>
-                            <td class="border border-slate-700 px-4 py-2">{{ $message->location }}</td>
-                            <td class="border border-slate-700 px-4 py-2">{{ $message->duration }} minutes</td>
-                            <td class="border border-slate-700 px-4 py-2">{{ $message->quizzes->isEmpty() ? 'No' : 'Yes' }}</td>
-                            <td class="border border-slate-700 px-4 py-2">
+                            <td >
+                                <p class="text-sm text-secondary mb-0">
+                                {{ $message->location }}
+                                </p>
+                            </td>
+                            <td >
+                                <p class="text-sm text-secondary mb-0">
+                                    {{ $message->duration }} minutes
+                                </p>
+                            </td>
+                            <td >
+                                <p class="text-sm text-secondary mb-0">
+                                {{ $message->quizzes->isEmpty() ? 'No' : 'Yes' }}
+                                </p>
+                            </td>
+                            <td >
                                 <a href="{{ route('admin.messages.quiz.create', $message->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                     Create&nbsp;quiz
                                 </a>
