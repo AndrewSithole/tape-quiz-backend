@@ -3,9 +3,7 @@
         {{ __('Quiz') }}
     </x-slot>
     <x-slot name="header">
-        <h6 class="font-weight-bolder mb-0 text-white">
             {{ __('Quiz') }}
-        </h6>
     </x-slot>
 
     <x-slot name="body">
