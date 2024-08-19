@@ -1,44 +1,47 @@
 <x-app-layout>
+    <x-slot name="title">
+        {{ __('Create Message') }}
+    </x-slot>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Create Message') }}
-        </h2>
+        {{ __('Create Message') }} <span class="font-weight-light font-italic">[page most likely not needed]</span>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form method="POST" action="{{ route('admin.messages.store') }}" enctype="multipart/form-data" class="bg-white dark:bg-gray-800 p-5 rounded shadow-lg">
-                        @csrf
-                        <div class="mb-4">
-                            <label for="title" class="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Title:</label>
-                            <input type="text" name="title" id="title" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 leading-tight focus:outline-none focus:shadow-outline" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="code" class="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Code:</label>
-                            <input type="text" name="code" id="code" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 leading-tight focus:outline-none focus:shadow-outline" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="date_preached" class="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Date Preached:</label>
-                            <input type="date" name="date_preached" id="date_preached" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 leading-tight focus:outline-none focus:shadow-outline" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="location" class="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Location:</label>
-                            <input type="text" name="location" id="location" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 leading-tight focus:outline-none focus:shadow-outline" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="image" class="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Image:</label>
-                            <input type="file" name="image" id="image" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 leading-tight focus:outline-none focus:shadow-outline">
-                        </div>
-                        <div class="mb-4">
-                            <label for="duration" class="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Duration (minutes):</label>
-                            <input type="number" name="duration" id="duration" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 leading-tight focus:outline-none focus:shadow-outline" required>
-                        </div>
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Create Message</button>
-                    </form>
-                </div>
+    <x-slot name='body'>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-200 mb-4">{{ __('Create Message') }} </h1>
+        <form method="POST" action="{{ route('admin.quiz.store') }}" enctype="multipart/form-data">
+            @csrf
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Title:</label>
+                <input type="text" name="title" id="title" class="form-control" required>
             </div>
-        </div>
-    </div>
+
+            <div class="mb-3">
+                <label for="code" class="form-label">Code:</label>
+                <input type="text" name="code" id="code" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="date_preached" class="form-label">Date Preached:</label>
+                <input type="date" name="date_preached" id="date_preached" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="location" class="form-label">Location:</label>
+                <input type="text" name="location" id="location" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="image" class="form-label">Image:</label>
+                <input type="file" name="image" id="image" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="duration" class="form-label">Duration (minutes):</label>
+                <input type="number" name="duration" id="duration" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create Message</button>
+        </form>
+    </x-slot>
 </x-app-layout>

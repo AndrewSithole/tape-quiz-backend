@@ -24,7 +24,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/messages/store', [MessageController::class, 'store'])->name('admin.messages.store');
         Route::get('/messages/{message}/edit', [MessageController::class, 'edit'])->name('admin.messages.edit');
         Route::put('/messages/{message}/update', [MessageController::class, 'update'])->name('admin.messages.update');
-        Route::get('/messages/{message}/quiz/create', [MessageController::class, 'createQuiz'])->name('admin.messages.quiz.create');
+        Route::get('/messages/{message}/quiz/create', [QuizController::class, 'create'])->name('admin.messages.quiz.create');
 
         //Quiz routes
         Route::get('/quiz', [QuizController::class, 'index'])->name('admin.quiz.index');

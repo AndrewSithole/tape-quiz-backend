@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Quiz;
 use App\Models\Message;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class QuizController extends Controller
@@ -24,25 +25,46 @@ class QuizController extends Controller
         return view('admin.quiz.index', compact('quiz'));
     }
     // In your QuizController
-    public function create()
+    public function create(Message $message): View
     {
-        // You can pass a list of sermons to the view for selection in a dropdown
-        $sermons = Message::all();
-        return view('quizzes.create', compact('sermons'));
+        $existing = $message->quizzes->first();
+        if($existing) {
+            return view('admin.quiz.create', compact('message'));
+        }
+        return view('admin.quiz.create', compact('message'));
     }
-
     public function store(Request $request)
     {
         $request->validate([
-            'sermon_id' => 'required|exists:sermons,id',
-            'due_date' => 'required|date',
+            'start_date' => 'required|date',
+            'deadline' => 'required|date|after_or_equal:start_date',
+            'published' => 'required|boolean',
+            'questions' => 'required|array|min:1',
+            'questions.*.text' => 'required|string',
+            'questions.*.correctAnswer' => 'required|string',
+            'questions.*.options' => 'required|array|min:1',
+            'questions.*.options.*' => 'required|string',
         ]);
 
-        $quiz = new Quiz($request->only(['sermon_id', 'due_date']));
+        $quiz = Quiz::create([
+            'message_id' => $request->message_id,
+            'published' => $request->published,
+            'start_date' => $request->start_date,
+            'deadline' => $request->deadline,
+        ]);
 
-        $quiz->save();
+        foreach ($request->questions as $questionData) {
+            $question = $quiz->questions()->create([
+                'question_text' => $questionData['text'],
+                'correct_answer' => $questionData['correctAnswer'],
+            ]);
 
-        return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully.');
+            foreach ($questionData['options'] as $option) {
+                $question->answerOptions()->create(['label' => $option]);
+            }
+        }
+
+        return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully!');
     }
 
 }

@@ -16,8 +16,8 @@
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ asset('css/nucleo-svg.css') }}">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
-
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @viteReactRefresh
+    @vite(['resources/sass/app.scss', 'resources/js/app.jsx'])
 
 </head>
 <body class="g-sidenav-show   bg-gray-100">

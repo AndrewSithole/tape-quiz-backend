@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('quizzes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('message_id')->constrained()->onDelete('cascade');
+            $table->date('start_date');
+            $table->date('deadline');
             $table->timestamps();
         });
     }
