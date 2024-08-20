@@ -42,7 +42,7 @@ class QuizController extends Controller
             'questions' => 'required|array|min:1',
             'questions.*.text' => 'required|string',
             'questions.*.correctAnswer' => 'required|string',
-            'questions.*.options' => 'required|array|min:1',
+            'questions.*.options' => 'required|array|min:4',
             'questions.*.options.*' => 'required|string',
         ]);
 
