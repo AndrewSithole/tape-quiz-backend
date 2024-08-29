@@ -18,6 +18,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     @viteReactRefresh
     @vite(['resources/sass/app.scss', 'resources/js/app.jsx'])
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
 </head>
 <body class="g-sidenav-show   bg-gray-100">
@@ -179,5 +180,6 @@
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
 <script src="{{ asset('js/argon-dashboard.min.js?v=2.0.5') }}"></script>
+@yield('scripts')
 </body>
 </html>

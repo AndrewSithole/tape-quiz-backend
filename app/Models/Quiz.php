@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Quiz extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'message_id',
+        'published',
+        'start_date',
+        'deadline',
+    ];
     public function message() {
         return $this->belongsTo(Message::class);
     }

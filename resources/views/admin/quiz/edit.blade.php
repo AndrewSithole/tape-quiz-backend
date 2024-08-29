@@ -1,48 +1,114 @@
 <x-app-layout>
+    <x-slot name="title">
+        {{ __('Create Quiz') }}
+    </x-slot>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Create Message') }}
-        </h2>
+        {{ $message->title }}
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form method="POST" action="{{ route('admin.messages.update', ["message"=>$message->id]) }}" enctype="multipart/form-data" class="bg-white dark:bg-gray-800 p-5 rounded shadow-lg">
-                        @csrf
-                        @method('PUT')
-                        <div class="mb-4">
-                            <label for="title" class="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Title:</label>
-                            <input type="text" name="title" id="title" value="{{ old('title', $message->title) }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 leading-tight focus:outline-none focus:shadow-outline" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="code" class="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Code:</label>
-                            <input type="text" name="code" id="code" value="{{ old('code', $message->code) }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 leading-tight focus:outline-none focus:shadow-outline" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="date_preached" class="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Date Preached:</label>
-                            <input type="date" name="date_preached" id="date_preached" value="{{ old('date_preached', $message->date_preached ? $message->date_preached->format('Y-m-d') : '') }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 leading-tight focus:outline-none focus:shadow-outline" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="location" class="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Location:</label>
-                            <input type="text" name="location" id="location" value="{{ old('location', $message->location) }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 leading-tight focus:outline-none focus:shadow-outline" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="image" class="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Image:</label>
-                            <input type="file" name="image" id="image" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 leading-tight focus:outline-none focus:shadow-outline">
-                            @if($message->image)
-                                <img src="{{ asset('storage/' . $message->image) }}" alt="Current Image" class="mt-2 rounded shadow" style="max-width: 200px;">
-                            @endif
-                        </div>
-                        <div class="mb-4">
-                            <label for="duration" class="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2">Duration (minutes):</label>
-                            <input type="number" name="duration" id="duration" value="{{ old('duration', $message->duration) }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 leading-tight focus:outline-none focus:shadow-outline" required>
-                        </div>
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Update Message</button>
-                    </form>
+    <x-slot name='body'>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-200 mb-4"><i class="bi bi-cassette opacity-10 pe-2"></i>{{ $message->title }}</h1>
+        <div class="container">
+            <h4>Edit Quiz</h4>
+
+            <form id="quiz-form" method="POST" action="{{ route('admin.quiz.update', $quiz->id) }}">
+                @csrf
+                @method('PUT')
+
+                <!-- Message ID (already selected) -->
+                <input type="hidden" name="message_id" value="{{ $quiz->message_id }}">
+
+                <!-- Scheduled Toggle -->
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="scheduledToggle" name="scheduled" {{ old('scheduled', $quiz->start_date ? 'checked' : '') }}>
+                    <label class="form-check-label" for="scheduledToggle">Schedule this quiz</label>
                 </div>
-            </div>
+
+                <!-- Start Date (Hidden by default, shown if scheduled) -->
+                <div id="startDateGroup" class="mb-3" style="{{ old('scheduled', $quiz->start_date) ? '' : 'display:none;' }}">
+                    <label for="startDate" class="form-label">Start Date</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                        <input type="date" class="form-control @error('start_date') is-invalid @enderror" id="startDate" name="start_date" value="{{ old('start_date', $quiz->start_date) }}">
+                        @error('start_date')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- Deadline (Hidden by default, shown if scheduled) -->
+                <div id="deadlineGroup" class="mb-3" style="{{ old('scheduled', $quiz->deadline) ? '' : 'display:none;' }}">
+                    <label for="deadline" class="form-label">Deadline</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                        <input type="date" class="form-control @error('deadline') is-invalid @enderror" id="deadline" name="deadline" value="{{ old('deadline', $quiz->deadline) }}">
+                        @error('deadline')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- Max Questions -->
+                <div class="mb-3">
+                    <label for="maxQuestions" class="form-label">Maximum Questions</label>
+                    <input type="number" class="form-control @error('max_questions') is-invalid @enderror" id="maxQuestions" name="max_questions" value="{{ old('max_questions', $quiz->max_questions) }}" min="1">
+                    @error('max_questions')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+
+                <!-- Published -->
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="published" name="published" value="1" {{ old('published', $quiz->published) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="published">
+                        Publish
+                    </label>
+                </div>
+
+                <!-- Questions List -->
+                <div class="mb-4">
+                    <h5>Quiz Questions</h5>
+                    <ul class="list-group mb-3">
+                        @foreach ($quiz->questions as $question)
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ $question->text }}
+                                <div>
+                                    <a href="{{ route('questions.edit', $question->id) }}" class="btn btn-sm btn-outline-secondary me-2">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </a>
+                                    <a href="{{ route('questions.delete', $question->id) }}" class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </a>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                    <a href="{{ route('admin.quiz.questions.manage', $quiz->id) }}" class="btn btn-primary">
+                        <i class="bi bi-plus-lg"></i> Add New Question
+                    </a>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-save"></i> Update Quiz
+                </button>
+            </form>
+
+            <!-- Optional: Add some JS to handle the toggle functionality -->
+            <script>
+                document.getElementById('scheduledToggle').addEventListener('change', function() {
+                    const isScheduled = this.checked;
+                    document.getElementById('startDateGroup').style.display = isScheduled ? 'block' : 'none';
+                    document.getElementById('deadlineGroup').style.display = isScheduled ? 'block' : 'none';
+                });
+            </script>
+
         </div>
-    </div>
+    </x-slot>
 </x-app-layout>

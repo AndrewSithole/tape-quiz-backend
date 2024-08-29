@@ -80,9 +80,15 @@
                                 </p>
                             </td>
                             <td >
-                                <a href="{{ route('admin.messages.quiz.create', $message->id) }}" class="btn btn-xs btn-primary m-1">
-                                    Create&nbsp;quiz
+                                @if($message->quizzes->isEmpty())
+                                    <a href="{{ route('admin.messages.quiz.create', $message->id) }}" class="btn btn-xs btn-primary m-1">
+                                        Create&nbsp;quiz
+                                    </a>
+                                @else
+                                <a href="{{ route('admin.quiz.edit', $message->quizzes->first()->id) }}" class="btn btn-xs btn-secondary m-1">
+                                    Edit&nbsp;quiz
                                 </a>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

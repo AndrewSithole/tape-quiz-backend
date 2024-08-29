@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuizController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\MessageController;
@@ -33,6 +34,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/quiz/{quiz}/edit', [QuizController::class, 'edit'])->name('admin.quiz.edit');
         Route::put('/quiz/{quiz}/update', [QuizController::class, 'update'])->name('admin.quiz.update');
         Route::delete('/quiz/{quiz}/delete', [QuizController::class, 'delete'])->name('admin.quiz.delete');
+
+        //Question routes
+        Route::get('/quiz/{quiz}/questions/manage', [QuestionController::class, 'manage'])->name('admin.quiz.questions.manage');
+        Route::post('/quiz/{quiz}/questions/store', [QuestionController::class, 'store'])->name('admin.quiz.questions.store');
     });
 
 });
