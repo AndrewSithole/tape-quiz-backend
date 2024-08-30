@@ -794,7 +794,49 @@ function notify(el) {
   }, 4500);
 }
 
+(function() {
+    const el = {
+        checked: false,
+        getAttribute: function(name) {
+            return this[name];
+        },
+        setAttribute: function(name, value) {
+            this[name] = !value;
+            if (name === 'checked') {
+                this.onCheckedChange(value);
+            }
+        },
+        onCheckedChange: function(value) {
+            console.log('Checked value changed to:', value);
+            darkMode(this);
+        }
+    }
+// Get host browser/computer dark mode status
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        el.setAttribute('checked', true)
+    }else{
+        el.setAttribute('checked', false)
+    }
+    function handleColorSchemeChange(event) {
+        if (event.matches) {
+            // Dark mode
+            el.setAttribute('checked', true);
+        } else {
+            // Light mode
+            el.setAttribute('checked', false);
+        }
+    }
 
+// Create a MediaQueryList object
+    const colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+// Add an event listener to listen for changes
+    colorSchemeQuery.addEventListener('change', handleColorSchemeChange);
+
+// Initial check
+    handleColorSchemeChange(colorSchemeQuery);
+
+})();
 
 // Light Mode / Dark Mode
 function darkMode(el) {
@@ -823,8 +865,8 @@ function darkMode(el) {
   const cardNavLinksIcons = document.querySelectorAll('.card .nav .nav-link i');
   const cardNavSpan = document.querySelectorAll('.card .nav .nav-link span');
 
-
-  if (!el.getAttribute("checked")) {
+const checked = el.getAttribute("checked");
+  if (!checked) {
     body.classList.add('dark-version');
     if (navbarBrandImg.includes('logo-ct-dark.png')) {
       var navbarBrandImgNew = navbarBrandImg.replace("logo-ct-dark", "logo-ct");
@@ -879,7 +921,7 @@ function darkMode(el) {
     }
     for (var i = 0; i < secondary.length; i++) {
       if (secondary[i].classList.contains('text-secondary')) {
-        secondary[i].classList.remove('text-secondary');
+        // secondary[i].classList.remove('text-secondary');
         secondary[i].classList.add('text-white');
         secondary[i].classList.add('opacity-8');
       }
@@ -905,7 +947,6 @@ function darkMode(el) {
     for (var i = 0; i < card_border.length; i++) {
       card_border[i].classList.add('border-dark');
     }
-    el.setAttribute("checked", "true");
   } else {
     body.classList.remove('dark-version');
     sidebar.classList.add('bg-white');
@@ -987,7 +1028,6 @@ function darkMode(el) {
     for (var i = 0; i < card_border_dark.length; i++) {
       card_border_dark[i].classList.remove('border-dark');
     }
-    el.removeAttribute("checked");
   }
 };
 var argon = {
