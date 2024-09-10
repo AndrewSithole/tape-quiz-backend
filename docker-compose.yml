@@ -9,7 +9,7 @@ services:
         networks:
             - appnet
         ports:
-            - "8080:80"
+            - ${APP_PORT}:80
         volumes:
             - .:/var/www/html
         working_dir: /var/www/html
@@ -26,11 +26,13 @@ services:
         container_name: mysql
         networks:
             - appnet
+        ports:
+            -   ${DB_PORT_FORWARD}:3306
         environment:
-            MYSQL_ROOT_PASSWORD: asDf!2E4
-            MYSQL_DATABASE: youngfoundations
-            MYSQL_USER: youngfoundations
-            MYSQL_PASSWORD: asdf1234
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
         volumes:
             - dbdata:/var/lib/mysql
 networks:
