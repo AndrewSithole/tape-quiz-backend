@@ -1,0 +1,44 @@
+services:
+    backend:
+        build:
+            context: ./docker/app
+            dockerfile: ./docker/app/Dockerfile
+        image: vgr-quiz/backend:latest
+        container_name: backend
+        restart: always
+        networks:
+            - appnet
+        ports:
+            - "8080:80"
+        volumes:
+            - .:/var/www/html
+        working_dir: /var/www/html
+    redis:
+        image: redis:alpine
+        container_name: redis
+        restart: always
+        networks:
+            - appnet
+        volumes:
+            -  cachedata:/data
+    db:
+        image: mysql:8.4
+        container_name: mysql
+        networks:
+            - appnet
+        environment:
+            MYSQL_ROOT_PASSWORD: asDf!2E4
+            MYSQL_DATABASE: youngfoundations
+            MYSQL_USER: youngfoundations
+            MYSQL_PASSWORD: asdf1234
+        volumes:
+            - dbdata:/var/lib/mysql
+networks:
+    appnet:
+        driver: bridge
+volumes:
+    dbdata:
+        driver: local
+    cachedata:
+        driver: local
+
