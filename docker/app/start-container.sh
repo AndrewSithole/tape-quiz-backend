@@ -19,5 +19,3 @@ else
     # Otherwise start supervisord
     /usr/bin/supervisord
 fi
-
-cd /var/www/html && composer install && php artisan migrate

@@ -2,7 +2,7 @@ services:
     backend:
         build:
             context: ./docker/app
-            dockerfile: ./docker/app/Dockerfile
+            dockerfile: Dockerfile
         image: vgr-quiz/backend:latest
         container_name: backend
         restart: always
@@ -13,6 +13,17 @@ services:
         volumes:
             - .:/var/www/html
         working_dir: /var/www/html
+#    node:
+#        build:
+#            context: ./docker/node
+#            dockerfile: Dockerfile
+#        image: vgr-quiz/node:latest
+#        networks:
+#            - appnet
+#        volumes:
+#            -   .:/opt
+#        working_dir: /opt
+#        command: echo "Node container is running"
     redis:
         image: redis:alpine
         container_name: redis

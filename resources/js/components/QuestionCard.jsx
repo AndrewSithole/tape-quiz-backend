@@ -1,9 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
 import AnswerOption from './AnswerOption';
 
-function QuestionCard({ question, index, onQuestionChange, onOptionChange, onAddOption }) {
+function QuestionCard({ question = { question_text: '', correct_answer: 'A', options: { A: '', B: '', C: '', D: '' } }, onSaveQuestion, onCancel }) {
+    const [currentQuestion, setCurrentQuestion] = useState(question);
+
     const handleInputChange = (field, value) => {
-        onQuestionChange(index, field, value);
+        setCurrentQuestion((prev) => ({ ...prev, [field]: value }));
+    };
+
+    const handleOptionChange = (key, value) => {
+        setCurrentQuestion((prev) => ({
+            ...prev,
+            options: { ...prev.options, [key]: value }
+        }));
     };
 
     return (
@@ -14,18 +23,18 @@ function QuestionCard({ question, index, onQuestionChange, onOptionChange, onAdd
                     <input
                         type="text"
                         className="form-control"
-                        value={question.question_text}
+                        value={currentQuestion.question_text}
                         onChange={(e) => handleInputChange('question_text', e.target.value)}
                     />
                 </div>
                 <div>
                     <label className="form-label">Answer Options</label>
-                    {Object.keys(question.options).map((key) => (
+                    {Object.keys(currentQuestion.options).map((key) => (
                         <AnswerOption
                             key={key}
                             label={key}
-                            value={question.options[key]}
-                            onChange={(e) => onOptionChange(index, key, e.target.value)}
+                            value={currentQuestion.options[key]}
+                            onChange={(e) => handleOptionChange(key, e.target.value)}
                         />
                     ))}
                 </div>
@@ -33,15 +42,31 @@ function QuestionCard({ question, index, onQuestionChange, onOptionChange, onAdd
                     <label className="form-label">Correct Answer</label>
                     <select
                         className="form-select"
-                        value={question.correct_answer}
+                        value={currentQuestion.correct_answer}
                         onChange={(e) => handleInputChange('correct_answer', e.target.value)}
                     >
-                        {Object.keys(question.options).map((key) => (
+                        {Object.keys(currentQuestion.options).map((key) => (
                             <option key={key} value={key}>
                                 {key}
                             </option>
                         ))}
                     </select>
+                </div>
+                <div className="d-flex justify-content-between">
+                    <button
+                        type="button"
+                        className="btn btn-success"
+                        onClick={() => onSaveQuestion(currentQuestion)}
+                    >
+                        Save
+                    </button>
+                    <button
+                        type="button"
+                        className="btn btn-secondary"
+                        onClick={onCancel}
+                    >
+                        Cancel
+                    </button>
                 </div>
             </div>
         </div>

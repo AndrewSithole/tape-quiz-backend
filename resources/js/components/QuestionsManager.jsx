@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import QuestionList from './QuestionList';
+import QuestionCard from './QuestionCard';
 
-function QuestionsManager({ initialQuestions = [] }) {
+function QuestionsManager({ quizId, initialQuestions = [] }) {
     const [questions, setQuestions] = useState(initialQuestions);
+    const [editingIndex, setEditingIndex] = useState(null); // Track which question is being edited
+    const [isCreating, setIsCreating] = useState(false); // Toggle for creating a new question
 
     const handleDragEnd = (result) => {
         if (!result.destination) return;
@@ -16,34 +19,45 @@ function QuestionsManager({ initialQuestions = [] }) {
     };
 
     const handleAddQuestion = () => {
-        setQuestions([...questions, { question_text: '', correct_answer: '', options: { A: '', B: '', C: '', D: '' } }]);
+        setIsCreating(true); // Toggle to create a new question
     };
 
-    const handleQuestionChange = (index, field, value) => {
+    const handleSaveNewQuestion = (newQuestion) => {
+        setQuestions([...questions, newQuestion]);
+        setIsCreating(false);
+    };
+
+    const handleEditQuestion = (index) => {
+        setEditingIndex(index);
+    };
+
+    const handleSaveEditedQuestion = (updatedQuestion) => {
         const updatedQuestions = [...questions];
-        updatedQuestions[index][field] = value;
+        updatedQuestions[editingIndex] = updatedQuestion;
+        setQuestions(updatedQuestions);
+        setEditingIndex(null); // Exit edit mode
+    };
+
+    const handleDeleteQuestion = (index) => {
+        const updatedQuestions = questions.filter((_, i) => i !== index);
         setQuestions(updatedQuestions);
     };
-
-    const handleOptionChange = (index, key, value) => {
-        const updatedQuestions = [...questions];
-        updatedQuestions[index].options[key] = value;
-        setQuestions(updatedQuestions);
-    };
-
     const handleSaveQuestions = async () => {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); // Fetch CSRF token from meta tag
+        const id = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); // Fetch CSRF token from meta tag
+
         try {
-            const response = await fetch('/api/questions', {
+            const response = await fetch(`/admin/quiz/${quizId}/questions/store`, {  // Updated to use the web route
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'X-CSRF-Token': csrfToken,
                 },
                 body: JSON.stringify({ questions }),
             });
 
             if (response.ok) {
-                alert('Questions saved successfully!');
+                location.href = `/admin/quiz/${quizId}/edit`;
             } else {
                 alert('Failed to save questions.');
             }
@@ -55,21 +69,38 @@ function QuestionsManager({ initialQuestions = [] }) {
 
     return (
         <div className="container">
-            <h3 className="mb-4">Manage Quiz Questions</h3>
+
             <DragDropContext onDragEnd={handleDragEnd}>
                 <QuestionList
                     questions={questions}
-                    onDragEnd={handleDragEnd}
-                    onQuestionChange={handleQuestionChange}
-                    onOptionChange={handleOptionChange}
+                    onEditQuestion={handleEditQuestion}
+                    onAddQuestion={handleAddQuestion}
+                    onDeleteQuestion={handleDeleteQuestion}
                 />
             </DragDropContext>
-            <button type="button" className="btn btn-primary mt-3" onClick={handleAddQuestion}>
-                Add Question
-            </button>
-            <button type="button" className="btn btn-success mt-3 ms-3" onClick={handleSaveQuestions}>
-                Save Questions
-            </button>
+
+            {/* Render the create question form only when creating */}
+            {isCreating && (
+                <QuestionCard
+                    onSaveQuestion={handleSaveNewQuestion}
+                    onCancel={() => setIsCreating(false)}
+                />
+            )}
+
+            {/* Render the edit question form when editing a specific question */}
+            {editingIndex !== null && (
+                <QuestionCard
+                    question={questions[editingIndex]}
+                    onSaveQuestion={handleSaveEditedQuestion}
+                    onCancel={() => setEditingIndex(null)}
+                />
+            )}
+
+            <div className="w-100 d-flex justify-content-end mt-4">
+                <button type="button" className="btn btn-success mt-3" onClick={handleSaveQuestions}>
+                    Save Questions
+                </button>
+            </div>
         </div>
     );
 }

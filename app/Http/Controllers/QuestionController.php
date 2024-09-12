@@ -5,18 +5,40 @@ namespace App\Http\Controllers;
 use App\Models\AnswerOption;
 use App\Models\Question;
 use App\Models\Quiz;
+use App\Services\QuizQuestionService;
 use Illuminate\Http\Request;
 
 class QuestionController extends Controller
 {
-    public function manage(Quiz $quiz)
+    protected QuizQuestionService $quizQuestionService;
+    public function __construct(QuizQuestionService $quizQuestionService)
     {
+        $this->quizQuestionService = $quizQuestionService;
+    }
+
+    public function manage($quizId): \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        $quiz = Quiz::with(['questions.options'])->findOrFail($quizId);
+//        die(json_encode($quiz));
+        $transformedQuestions = $quiz->questions->map(function ($question) {
+            $options = $question->options;
+            return [
+                'question_text' => $question->question_text,
+                'correct_answer' => $question->correct_answer,
+                'options' => [
+                    'A' => $question->options->A,
+                    'B' => $question->options->B,
+                    'C' => $question->options->C,
+                    'D' => $question->options->D,
+                ],
+            ];
+        })->toArray();
         return view('admin.questions.manage')->with([
             'quiz' => $quiz,
             'message' => $quiz->message,
         ]);
     }
-    public function store(Request $request)
+    public function store($quiz, Request $request)
     {
         $data = $request->validate([
             'questions' => 'required|array',
@@ -29,21 +51,7 @@ class QuestionController extends Controller
             'questions.*.options.D' => 'required|string',
         ]);
 
-        foreach ($data['questions'] as $questionData) {
-            $question = Question::create([
-                'quiz_id' => $request->quiz_id, // Adjust as needed
-                'question_text' => $questionData['question_text'],
-                'correct_answer' => $questionData['correct_answer'],
-            ]);
-
-            foreach ($questionData['options'] as $key => $value) {
-                AnswerOption::create([
-                    'question_id' => $question->id,
-                    'label' => $value,
-                    'key' => $key, // Adjust schema as needed
-                ]);
-            }
-        }
+        $this->quizQuestionService->storeQuestions($quiz, $data['questions']);
 
         return response()->json(['message' => 'Questions saved successfully.']);
     }

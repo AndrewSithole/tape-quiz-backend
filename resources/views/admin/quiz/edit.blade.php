@@ -77,14 +77,9 @@
                     <ul class="list-group mb-3">
                         @foreach ($quiz->questions as $question)
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                {{ $question->text }}
+                                {{ $question->question_text }}
                                 <div>
-                                    <a href="{{ route('questions.edit', $question->id) }}" class="btn btn-sm btn-outline-secondary me-2">
-                                        <i class="bi bi-pencil"></i> Edit
-                                    </a>
-                                    <a href="{{ route('questions.delete', $question->id) }}" class="btn btn-sm btn-outline-danger">
-                                        <i class="bi bi-trash"></i> Delete
-                                    </a>
+
                                 </div>
                             </li>
                         @endforeach
