@@ -58,7 +58,7 @@ function QuestionCard({ question = { question_text: '', correct_answer: 'A', opt
                         className="btn btn-success"
                         onClick={() => onSaveQuestion(currentQuestion)}
                     >
-                        Save
+                        Continue
                     </button>
                     <button
                         type="button"
