@@ -49,7 +49,7 @@ class QuizController extends Controller
     {
         $quizData = [
             'message_id' => $request->message_id,
-            'published' => $request->published??false,
+            'published' => $request->published==='on',
             'max_questions' => $request->max_questions??20,
         ];
 
@@ -79,7 +79,7 @@ class QuizController extends Controller
             'max_questions' => 'required|integer|min:0|max:100',
         ]);
 
-        $quiz->published = $request->published??false;
+        $quiz->published = $request->published==='on';
         $quiz->max_questions = $request->max_questions;
 
         if ($request->filled('start_date') && strtotime($request->start_date)) {

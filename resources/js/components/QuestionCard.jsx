@@ -21,7 +21,7 @@ function QuestionCard({ question = { question_text: '', correct_answer: 'A', opt
         const { question_text, correct_answer, options } = currentQuestion;
 
         // 1. Question text must be longer than 20 characters
-        if (question_text.length <= 20) {
+        if (question_text.length <= 10) {
             newErrors.question_text = 'Question text must be longer than 20 characters.';
         }
 

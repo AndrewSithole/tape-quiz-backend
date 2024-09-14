@@ -27,7 +27,7 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse |  \Illuminate\Http\JsonResponse
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -45,6 +45,10 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
+        if ($request->expectsJson()) {
+            $token = $user->createToken('API Token')->plainTextToken;
+            return response()->json(['message' => 'User registered successfully', 'user' => $user, 'token' => $token], 201);
+        }
         return redirect(route('dashboard', absolute: false));
     }
 }
