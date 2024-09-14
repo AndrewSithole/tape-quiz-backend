@@ -30,7 +30,7 @@ function QuestionCard({ question = { question_text: '', correct_answer: 'A', opt
                 <div>
                     <label className="form-label">Answer Options</label>
                     {Object.keys(currentQuestion.options).map((key) => (
-                        <AnswerOption
+                         ['A', 'B', 'C', 'D'].includes(key)  && <AnswerOption
                             key={key}
                             label={key}
                             value={currentQuestion.options[key]}
