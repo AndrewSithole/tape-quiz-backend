@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\QuestionAnswer;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -236,9 +236,10 @@ class AnswerOptionSeeder extends Seeder
 
             // Update the question with the correct_option_id
             if ($correctOptionId) {
-                DB::table('questions')
-                    ->where('id', $questionId)
-                    ->update(['correct_option_id' => $correctOptionId]);
+                QuestionAnswer::create([
+                    'question_id'=>$questionId,
+                        'answer_option_id' => $correctOptionId
+                    ]);
             }
         }
     }

@@ -1,15 +1,18 @@
 import React from 'react';
 
-function AnswerOption({ label, value, onChange }) {
+// AnswerOption.jsx
+function AnswerOption({ index, value, onChange, error }) {
     return (
-        <div className="input-group mb-2">
-            <span className="input-group-text">{label}</span>
+        <div className="flex-grow-1">
             <input
                 type="text"
-                className="form-control"
+                className={`form-control ${error ? 'is-invalid' : ''}`}
                 value={value}
                 onChange={onChange}
             />
+            {error && (
+                <div className="invalid-feedback">{error}</div>
+            )}
         </div>
     );
 }

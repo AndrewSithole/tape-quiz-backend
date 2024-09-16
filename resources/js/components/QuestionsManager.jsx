@@ -1,3 +1,4 @@
+// QuestionsManager.jsx
 import React, { useState } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import QuestionList from './QuestionList';
@@ -42,12 +43,12 @@ function QuestionsManager({ quizId, initialQuestions = [] }) {
         const updatedQuestions = questions.filter((_, i) => i !== index);
         setQuestions(updatedQuestions);
     };
+
     const handleSaveQuestions = async () => {
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); // Fetch CSRF token from meta tag
-        const id = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); // Fetch CSRF token from meta tag
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
         try {
-            const response = await fetch(`/admin/quiz/${quizId}/questions/store`, {  // Updated to use the web route
+            const response = await fetch(`/admin/quiz/${quizId}/questions/store`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -69,7 +70,6 @@ function QuestionsManager({ quizId, initialQuestions = [] }) {
 
     return (
         <div className="container">
-
             <DragDropContext onDragEnd={handleDragEnd}>
                 <QuestionList
                     questions={questions}

@@ -13,10 +13,15 @@ function QuestionList({ questions, onEditQuestion, onDeleteQuestion, onAddQuesti
                                     <div
                                         ref={provided.innerRef}
                                         {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
                                         className="list-group-item d-flex justify-content-between align-items-center"
                                     >
-                                        <span>{question.question_text}</span>
+                                        <div className="d-flex align-items-center">
+                                            <span {...provided.dragHandleProps} className="me-2 text-secondary" style={{ cursor: 'grab' }}>☰</span>
+                                            <div>
+                                                <div>{question.question_text}</div>
+                                                <small className="text-muted">{question.question_type === 'true_false' ? 'True/False' : 'Multiple Choice'}</small>
+                                            </div>
+                                        </div>
                                         <div>
                                             <button
                                                 className="btn btn-outline-primary btn-sm"
@@ -39,7 +44,7 @@ function QuestionList({ questions, onEditQuestion, onDeleteQuestion, onAddQuesti
                     </div>
                 )}
             </Droppable>
-            <div className="list-group-item  btn btn-outline-secondary" onClick={onAddQuestion}>
+            <div className="list-group-item btn btn-outline-secondary mt-3" onClick={onAddQuestion}>
                 <div className="gap-3 d-flex justify-content-center align-items-center">
                     <div><span className="bi bi-plus font-weight-bold text-5xl"></span></div>
                     <div>Add New</div>
