@@ -18,6 +18,6 @@ class Question extends Model
         return $this->belongsTo(Quiz::class);
     }
     public function options() {
-        return $this->hasOne(AnswerOption::class);
+        return $this->hasMany(AnswerOption::class);
     }
 }

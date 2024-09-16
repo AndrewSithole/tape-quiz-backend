@@ -25,5 +25,8 @@ class DatabaseSeeder extends Seeder
             'password' => 'asdf1234',
         ]);
         $this->call(MessageSeeder::class);
+        $this->call(QuizzesSeeder::class);
+        $this->call(QuestionSeeder::class);
+        $this->call(AnswerOptionSeeder::class);
     }
 }
