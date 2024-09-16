@@ -22,9 +22,21 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request): RedirectResponse |\Illuminate\Http\JsonResponse
     {
         $request->authenticate();
+
+        if ($request->expectsJson()) {
+            $user = Auth::user();
+            $token = $user->createToken('API Token')->plainTextToken;
+
+            // Return JSON response for API requests
+            return response()->json([
+                'message' => 'Success',
+                'user' => $user,
+                'token' => $token
+            ], 201);
+        }
 
         $request->session()->regenerate();
 

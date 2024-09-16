@@ -95,4 +95,21 @@ class QuizController extends Controller
         return redirect()->route('admin.messages.index')->with('message', 'Quiz updated successfully!');
     }
 
+    public function delete(Quiz $quiz)
+    {
+        $quiz->delete();
+        return redirect()->route('admin.messages.index')->with('message', 'Quiz deleted successfully!');
+    }
+    public function featured()
+    {
+        //get quiz that is published and has not passed the deadline, get the message it belongs to, get questions and answers too
+
+        $quiz = Quiz::where('deadline', '>', now())
+            ->where('published', true)
+            ->with('message:id,title,code,image_url', 'questions.options')
+            ->first();
+        return response()->json($quiz);
+
+    }
+
 }
