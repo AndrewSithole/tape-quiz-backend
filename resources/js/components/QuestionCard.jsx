@@ -4,7 +4,7 @@ import AnswerOption from './AnswerOption';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 function QuestionCard({ question = { question_text: '', question_type: 'multiple_choice', correct_answer: '', options: [] }, onSaveQuestion, onCancel }) {
-    const [currentQuestion, setCurrentQuestion] = useState(question);
+    const [currentQuestion, setCurrentQuestion] = useState({...question, question_type:question.question_type??'multiple_choice'});
     const [errors, setErrors] = useState({});
 
     const handleInputChange = (field, value) => {

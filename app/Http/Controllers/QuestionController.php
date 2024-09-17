@@ -18,21 +18,7 @@ class QuestionController extends Controller
 
     public function manage($quizId): \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $quiz = Quiz::with(['questions.options'])->findOrFail($quizId);
-//        die(json_encode($quiz));
-        $transformedQuestions = $quiz->questions->map(function ($question) {
-            $options = $question->options;
-            return [
-                'question_text' => $question->question_text,
-                'correct_answer' => $question->correct_answer,
-                'options' => [
-                    'A' => $question->options->A,
-                    'B' => $question->options->B,
-                    'C' => $question->options->C,
-                    'D' => $question->options->D,
-                ],
-            ];
-        })->toArray();
+        $quiz = Quiz::with(['questions.options', 'questions.correct_answer'])->findOrFail($quizId);
         return view('admin.questions.manage')->with([
             'quiz' => $quiz,
             'message' => $quiz->message,
@@ -45,10 +31,6 @@ class QuestionController extends Controller
             'questions.*.question_text' => 'required|string',
             'questions.*.correct_answer' => 'required|in:A,B,C,D',
             'questions.*.options' => 'required|array',
-            'questions.*.options.A' => 'required|string',
-            'questions.*.options.B' => 'required|string',
-            'questions.*.options.C' => 'required|string',
-            'questions.*.options.D' => 'required|string',
         ]);
 
         $this->quizQuestionService->storeQuestions($quiz, $data['questions']);
