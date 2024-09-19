@@ -18,22 +18,36 @@ class QuestionController extends Controller
 
     public function manage($quizId): \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $quiz = Quiz::with(['questions.options', 'questions.correct_answer'])->findOrFail($quizId);
+        $quiz = Quiz::with(['questions.options', 'questions.correctAnswer'])->find($quizId);
+
+        foreach ($quiz->questions as $question){
+            $question->correct_answer_order = $question->correctAnswer->order;
+        }
+
         return view('admin.questions.manage')->with([
             'quiz' => $quiz,
             'message' => $quiz->message,
         ]);
     }
-    public function store($quiz, Request $request)
+    public function store($quizId, Request $request)
     {
-        $data = $request->validate([
-            'questions' => 'required|array',
-            'questions.*.question_text' => 'required|string',
-            'questions.*.correct_answer' => 'required|in:A,B,C,D',
-            'questions.*.options' => 'required|array',
-        ]);
+        try{
+            $data = $request->validate([
+                'questions' => 'required|array',
+                'questions.*.question_text' => 'required|string',
+                'questions.*.correct_answer_order' => 'required|integer|min:0',
+                'questions.*.options' => 'required|array|min:1',
+                'questions.*.options.*.option_text' => 'required|string',
+            ]);
+        }catch (\Exception $e){
+            return response()->json([
+                'message' => 'Invalid data.',
+                'errors' => $e->errors()
+            ], 422);
+        }
 
-        $this->quizQuestionService->storeQuestions($quiz, $data['questions']);
+
+        $this->quizQuestionService->storeQuestions($quizId, $data['questions']);
 
         return response()->json(['message' => 'Questions saved successfully.']);
     }

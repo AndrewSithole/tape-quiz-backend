@@ -26,6 +26,8 @@ function QuestionsManager({ quizId, initialQuestions = [] }) {
     const handleSaveNewQuestion = (newQuestion) => {
         setQuestions([...questions, newQuestion]);
         setIsCreating(false);
+        setEditingIndex(null);
+
     };
 
     const handleEditQuestion = (index) => {
@@ -37,6 +39,7 @@ function QuestionsManager({ quizId, initialQuestions = [] }) {
         updatedQuestions[editingIndex] = updatedQuestion;
         setQuestions(updatedQuestions);
         setEditingIndex(null); // Exit edit mode
+
     };
 
     const handleDeleteQuestion = (index) => {
@@ -67,15 +70,21 @@ function QuestionsManager({ quizId, initialQuestions = [] }) {
             alert('An error occurred while saving questions.');
         }
     };
+    const handleCancelEdit = () => {
+        setEditingIndex(null);
+    };
 
     return (
         <div className="container">
             <DragDropContext onDragEnd={handleDragEnd}>
                 <QuestionList
                     questions={questions}
+                    editingQuestionIndex={editingIndex}
                     onEditQuestion={handleEditQuestion}
                     onAddQuestion={handleAddQuestion}
                     onDeleteQuestion={handleDeleteQuestion}
+                    onCancelEdit={handleCancelEdit}
+                    onSaveQuestion={handleSaveEditedQuestion}
                 />
             </DragDropContext>
 
@@ -87,14 +96,6 @@ function QuestionsManager({ quizId, initialQuestions = [] }) {
                 />
             )}
 
-            {/* Render the edit question form when editing a specific question */}
-            {editingIndex !== null && (
-                <QuestionCard
-                    question={questions[editingIndex]}
-                    onSaveQuestion={handleSaveEditedQuestion}
-                    onCancel={() => setEditingIndex(null)}
-                />
-            )}
 
             <div className="w-100 d-flex justify-content-end mt-4">
                 <button type="button" className="btn btn-success mt-3" onClick={handleSaveQuestions}>

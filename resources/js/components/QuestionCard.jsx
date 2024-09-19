@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import AnswerOption from './AnswerOption';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
-function QuestionCard({ question = { question_text: '', question_type: 'multiple_choice', correct_answer: '', options: [] }, onSaveQuestion, onCancel }) {
+function QuestionCard({ question = { question_text: '', question_type: 'multiple_choice', correct_answer_order: '', options: [] }, onSaveQuestion, onCancel }) {
     const [currentQuestion, setCurrentQuestion] = useState({...question, question_type:question.question_type??'multiple_choice'});
     const [errors, setErrors] = useState({});
 
@@ -48,7 +48,7 @@ function QuestionCard({ question = { question_text: '', question_type: 'multiple
 
     const validateQuestion = () => {
         const newErrors = {};
-        const { question_text, correct_answer, options, question_type } = currentQuestion;
+        const { question_text, correct_answer_order, options, question_type } = currentQuestion;
 
         // 1. Question text must be longer than 10 characters
         if (question_text.length <= 10) {
@@ -75,13 +75,13 @@ function QuestionCard({ question = { question_text: '', question_type: 'multiple
             }
 
             // 4. Correct answer must be one of the options
-            if (correct_answer === '' || !options[correct_answer]) {
-                newErrors.correct_answer = 'Correct answer must be selected.';
+            if (correct_answer_order === '' || !options[correct_answer_order]) {
+                newErrors.correct_answer_order = 'Correct answer must be selected.';
             }
         } else if (question_type === 'true_false') {
             // For true/false, correct answer must be '0' or '1'
-            if (correct_answer !== '0' && correct_answer !== '1') {
-                newErrors.correct_answer = 'Correct answer must be True or False.';
+            if (correct_answer_order !== '0' && correct_answer_order !== '1') {
+                newErrors.correct_answer_order = 'Correct answer must be True or False.';
             }
         }
 
@@ -105,14 +105,14 @@ function QuestionCard({ question = { question_text: '', question_type: 'multiple
                 ...prev,
                 question_type: value,
                 options: [{ option_text: 'True' }, { option_text: 'False' }],
-                correct_answer: '', // Reset correct answer
+                correct_answer_order: '', // Reset correct answer
             }));
         } else {
             setCurrentQuestion((prev) => ({
                 ...prev,
                 question_type: value,
                 options: [], // Reset options
-                correct_answer: '',
+                correct_answer_order: '',
             }));
         }
     };
@@ -210,9 +210,9 @@ function QuestionCard({ question = { question_text: '', question_type: 'multiple
                 <div className="mb-3">
                     <label className="form-label">Correct Answer</label>
                     <select
-                        className={`form-select ${errors.correct_answer ? 'is-invalid' : ''}`}
-                        value={currentQuestion.correct_answer}
-                        onChange={(e) => handleInputChange('correct_answer', e.target.value)}
+                        className={`form-select ${errors.correct_answer_order ? 'is-invalid' : ''}`}
+                        value={currentQuestion.correct_answer_order}
+                        onChange={(e) => handleInputChange('correct_answer_order', parseInt(e.target.value))}
                     >
                         <option value="">Select Correct Answer</option>
                         {currentQuestion.options.map((option, index) => (
@@ -221,8 +221,8 @@ function QuestionCard({ question = { question_text: '', question_type: 'multiple
                             </option>
                         ))}
                     </select>
-                    {errors.correct_answer && (
-                        <div className="invalid-feedback">{errors.correct_answer}</div>
+                    {errors.correct_answer_order && (
+                        <div className="invalid-feedback">{errors.correct_answer_order}</div>
                     )}
                 </div>
 

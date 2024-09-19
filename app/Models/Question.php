@@ -12,17 +12,21 @@ class Question extends Model
     protected $fillable = [
         'quiz_id',
         'question_text',
+        'correct_answer_option_id',
     ];
-    public function quiz(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+
+    public function quiz()
     {
         return $this->belongsTo(Quiz::class);
     }
-    public function options(): \Illuminate\Database\Eloquent\Relations\HasMany
+
+    public function options()
     {
         return $this->hasMany(AnswerOption::class);
     }
-    public function correct_answer(): \Illuminate\Database\Eloquent\Relations\HasOne
+
+    public function correctAnswer()
     {
-        return $this->hasOne(QuestionAnswer::class);
+        return $this->belongsTo(AnswerOption::class, 'correct_answer_option_id');
     }
 }
